@@ -3,38 +3,46 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    int i = 0;
+    string gtinh = "";
 }
 
-<h2>Index</h2>
+<h2>DANH SÁCH NHÂN VIÊN</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Thêm mới", "Create")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.HoNV)
+            STT
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TenNV)
+            Mã nhân viên
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.GioiTinh)
+            Họ nhân viên
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.NgaySinh)
+            Tên Nv
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Luong)
+            Giới tính
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.AnhNV)
+            Ngày sinh
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DiaChi)
+            Lương
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PhongBan.TenPB)
+            Ảnh NV
+        </th>
+        <th>
+            Địa chỉ
+        </th>
+        <th>
+            Phòng ban
         </th>
         <th></th>
     </tr>
@@ -42,13 +50,25 @@
 @foreach (var item in Model) {
     <tr>
         <td>
+            @{ i++;}
+            @i
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaNV)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.HoNV)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.TenNV)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.GioiTinh)
+            @{if (item.GioiTinh == true)
+                { gtinh = "Nam"; }
+                else
+                { gtinh = "Nữ"; }
+            }
+            @gtinh
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.NgaySinh)
@@ -66,9 +86,9 @@
             @Html.DisplayFor(modelItem => item.PhongBan.TenPB)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MaNV }) |
-            @Html.ActionLink("Details", "Details", new { id=item.MaNV }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.MaNV })
+            @Html.ActionLink("Edit", "Edit", new { id = item.MaNV }) |
+            @Html.ActionLink("Details", "Details", new { id = item.MaNV }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.MaNV })
         </td>
     </tr>
 }
