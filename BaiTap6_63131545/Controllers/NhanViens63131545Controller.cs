@@ -15,6 +15,43 @@ namespace BaiTap6_63131545.Controllers
         private QLNV_63131545Entities db = new QLNV_63131545Entities();
 
         // GET: NhanViens63131545
+        [HttpGet]
+
+        public ActionResult TimKiemNC(string maNV = "", string hoTen = "", string gioiTinh = "", string luongMin = "", string luongMax = "", string diaChi = "", string maPB = "")
+        {
+            string min = luongMin, max = luongMax;
+            if (gioiTinh != "1" && gioiTinh != "0")
+                gioiTinh = null;
+            ViewBag.maNV = maNV;
+            ViewBag.hoTen = hoTen;
+            ViewBag.gioiTinh = gioiTinh;
+            if (luongMin == "")
+            {
+                ViewBag.luongMin = "";
+                min = "0";
+            }
+            else
+            {
+                ViewBag.luongMin = luongMin;
+                min = luongMin;
+            }
+            if (max == "")
+            {
+                max = Int32.MaxValue.ToString();
+                ViewBag.luongMax = "";// Int32.MaxValue.ToString(); 
+            }
+            else
+            {
+                ViewBag.luongMax = luongMax;
+                max = luongMax;
+            }
+            ViewBag.diaChi = diaChi;
+            ViewBag.MaPB = new SelectList(db.PhongBans, "MaPB", "TenPB");
+            var nhanViens = db.NhanViens.SqlQuery("NhanVien_TimKiem'" + maNV + "',N'" + hoTen + "','" + gioiTinh + "','" + min + "','" + max + "',N'" + diaChi + "','" + maPB + "'");
+            if (nhanViens.Count() == 0)
+                ViewBag.TB = "Không có thông tin tìm kiếm.";
+            return View(nhanViens.ToList());
+        }
         public ActionResult Index()
         {
             var nhanViens = db.NhanViens.Include(n => n.PhongBan);
@@ -50,8 +87,16 @@ namespace BaiTap6_63131545.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "MaNV,HoNV,TenNV,GioiTinh,NgaySinh,Luong,AnhNV,DiaChi,MaPB")] NhanVien nhanVien)
         {
+            //System.Web.HttpPostedFileBase Avatar;
+            var imgNV = Request.Files["Avatar"];
+            //Lấy thông tin từ input type=file có tên Avatar
+            string postedFileName = System.IO.Path.GetFileName(imgNV.FileName);
+            //Lưu hình đại diện về Server
+            var path = Server.MapPath("/Images/" + postedFileName);
+            imgNV.SaveAs(path);
             if (ModelState.IsValid)
             {
+                nhanVien.AnhNV = postedFileName; 
                 db.NhanViens.Add(nhanVien); // them
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -127,6 +172,22 @@ namespace BaiTap6_63131545.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult TimKiem_63131545()
+        {
+            var nhanViens = db.NhanViens.Include(n => n.PhongBan);
+            return View(nhanViens.ToList());
+        }
+        [HttpPost]
+        public ActionResult TimKiem_63131545(string maNV, string hoTen)
+        {
+
+            //var nhanViens = db.NhanViens.SqlQuery("exec NhanVien_DS '"+maNV+"' ");
+            /// var nhanViens = db.NhanViens.SqlQuery("SELECT * FROM NhanVien WHERE MaNV='" + maNV + "'");
+            /*var nhanViens = db.NhanViens.Where(abc => abc.MaNV == maNV);*/
+            var nhanViens = db.NhanViens.SqlQuery("exec TimKiem2TC '" + maNV + "' ,N'" + hoTen + "'");
+            return View(nhanViens.ToList());
         }
     }
 }

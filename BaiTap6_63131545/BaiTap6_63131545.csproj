@@ -235,9 +235,12 @@
     <Content Include="Views\NhanViens63131545\Edit.cshtml" />
     <Content Include="Views\NhanViens63131545\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
+    <Content Include="Views\NhanViens63131545\TimKiem_63131545.cshtml" />
+    <Content Include="Views\NhanViens63131545\TimKiemNC.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
